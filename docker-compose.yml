@@ -1,0 +1,35 @@
+services:
+  app:
+    build: .
+    container_name: bot_app
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command: npm run dev
+    networks:
+      - bot_net
+
+  db:
+    image: postgres:15
+    container_name: bot_db
+    restart: always
+    env_file:
+      - .env.db
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - bot_net
+
+volumes:
+  pgdata:
+
+networks:
+  bot_net:
